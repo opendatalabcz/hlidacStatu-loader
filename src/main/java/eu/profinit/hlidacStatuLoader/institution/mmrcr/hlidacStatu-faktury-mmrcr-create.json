@@ -1,0 +1,218 @@
+{
+  "name": "Faktury MMRČR",
+  "datasetId": "faktury-mmrcr",
+  "origUrl": "http://www.mmr.cz/getmedia/30c36454-8062-4649-9b55-fbb89d1c86e5/Faktury-2015_2.xlsx",
+  "sourcecodeUrl": null,
+  "description": "OpenDataLab.cz - Faktury Ministerstva pro místní rozvoj České republiky od roku 2015",
+  "betaversion": true,
+  "jsonSchema": {
+	"definitions": {
+		"partner": {
+		  "type": [
+			"object",
+			"null"
+		  ],
+		  "properties": {
+			"name": {
+			  "type": [
+				"string",
+				"null"
+			  ]
+			},
+			"ICO": {
+			  "type": [
+				"string",
+				"null"
+			  ]
+			}
+		  }
+		}
+	  },
+    "type": "object",
+    "properties": {
+      "Id": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "subject": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "variableSymbol": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "dateCreated": {
+        "type": [
+          "string",
+          "null"
+        ],
+		"format": "date"
+      },
+      "dateOfPayment": {
+        "type": [
+          "string",
+          "null"
+        ],
+		"format": "date"
+      },
+      "currency": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "originalCurrencyAmount": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "amountCzk": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "partner": {
+        "$ref": "#/definitions/partner"
+      },
+      "authorityIdentifier": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    }
+  },
+  "searchResultTemplate": {
+    "body": '<table class="table table-hover">
+    <thead>
+        <tr>
+			<th>Číslo faktury</th>
+            <th>Datum přijetí</th>
+            <th>Datum úhrady</th>
+            <th>Účastník</th>
+            <th>Částka</th>
+            <th>Měna</th>
+        </tr>
+    </thead>
+    <tbody>
+                        
+	{{ for item in model.Result }}
+           <tr>
+				<td style="white-space: nowrap;">
+                    <a href="{{fn_DatasetItemUrl item.Id}}">{{item.authorityIdentifier}}</a>
+                </td>
+                <td>
+                    {{fn_FormatDate item.dateCreated  "dd.MM.yyyy"}}
+                </td>
+                <td>
+					{{ if (fn_IsNullOrEmpty item.dateOfPayment)}}
+						neuhrazeno
+					{{ else }}
+						{{fn_FormatDate item.dateOfPayment  "dd.MM.yyyy"}}
+					{{end #if}}
+                </td>
+                <td>
+                        {{ if (fn_IsNullOrEmpty item.partner.ICO)}}
+                            
+                                {{ fn_NormalizeText item.partner.name }}
+                            
+                        {{else}}
+                            
+                                <a href="https://www.hlidacstatu.cz/subjekt/{{item.partner.ICO}}">{{fn_NormalizeText item.partner.name}}</a><br />
+                        {{end #if }}
+                    
+                </td>
+                <td>
+                    {{item.originalCurrencyAmount}}
+                </td>
+                <td>{{item.currency}}</td>
+            </tr>
+	{{end }}
+	</tbody>
+</table>',
+	"properties": null
+  },
+  "detailTemplate": {
+    "body": '{{this.item = model}}
+<table class="table table-hover">
+        <tbody>
+            <tr>
+                <td>Číslo faktury</td>
+                <td>{{item.authorityIdentifier}}</td>
+            </tr>
+            <tr>
+                <td>Účel platby</td>
+                <td>
+					{{ if (fn_IsNullOrEmpty item.subject)}}
+						neuvedeno
+					{{else}}
+						{{ fn_NormalizeText item.subject}}
+					{{end #if}}
+				</td>
+            </tr>
+            <tr>
+                <td>Variabilní symbol</td>
+                <td>{{item.variableSymbol}}</td>
+            </tr>
+            <tr>
+                <td>Datum přijetí</td>
+                <td>
+                    {{fn_FormatDate item.dateCreated  "dd.MM.yyyy"}}
+                </td>
+            </tr>
+            <tr>
+                <td>Datum úhrady</td>
+                <td>
+                    {{ if (fn_IsNullOrEmpty item.dateOfPayment)}}
+						neuhrazeno
+					{{ else }}
+						{{fn_FormatDate item.dateOfPayment  "dd.MM.yyyy"}}
+					{{end #if}}
+                </td>
+            </tr>
+            <tr>
+                <td>Měna</td>
+                <td>
+                    {{item.currency}}
+                </td>
+            </tr>
+            <tr>
+                <td>Celková částka v původní měně</td>
+                <td>
+                    {{item.originalCurrencyAmount}}
+                </td>
+            </tr>
+            <tr>
+                <td>Celková částka v CZK</td>
+                <td>
+                    {{item.amountCzk}}
+                </td>
+            </tr>
+			<tr>
+				<td>Účastník</td>
+				<td>
+                        {{ if (fn_IsNullOrEmpty item.partner.ICO)}}
+                            
+                                {{ fn_NormalizeText item.partner.name }}
+                            
+                        {{else}}
+                            
+                                <a href="https://www.hlidacstatu.cz/subjekt/{{item.partner.ICO}}">{{fn_NormalizeText item.partner.name}}</a><br />
+                        {{end #if }}
+                    
+                </td>
+			</tr>
+        </tbody>
+    </table>',
+    "properties": null
+  }
+}
