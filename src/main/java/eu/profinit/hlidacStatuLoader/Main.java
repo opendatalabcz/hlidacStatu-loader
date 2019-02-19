@@ -6,6 +6,7 @@ import eu.profinit.hlidacStatuLoader.institution.mdcr.MDCRCreator;
 import eu.profinit.hlidacStatuLoader.institution.mfcr.MFCRCreator;
 import eu.profinit.hlidacStatuLoader.institution.mmrcr.MMRCRCreator;
 import eu.profinit.hlidacStatuLoader.institution.mscr.MSCRCreator;
+import eu.profinit.hlidacStatuLoader.institution.sfdi.SFDICreator;
 import eu.profinit.hlidacStatuLoader.restCommunication.RestCommunicator;
 
 import java.io.IOException;
@@ -20,7 +21,8 @@ public class Main
 //        InstitutionCreator ic = new MFCRCreator();
 //        InstitutionCreator ic = new MSCRCreator();
 //        InstitutionCreator ic = new MMRCRCreator();
-        InstitutionCreator ic = new MDCRCreator();
+//        InstitutionCreator ic = new MDCRCreator();
+        InstitutionCreator ic = new SFDICreator();
         try {
             RestCommunicator.POSTRequest(DbCommunicator.getJsonResult(ic), ic.getDatasetId());
         } catch (IOException e) {
