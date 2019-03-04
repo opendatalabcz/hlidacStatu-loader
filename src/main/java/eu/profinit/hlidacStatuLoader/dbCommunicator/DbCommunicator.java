@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DbCommunicator {
     public static List getJsonResult(InstitutionCreator ic) {
-        String url = "jdbc:postgresql://localhost:5432/postgres";
+        String url = "jdbc:postgresql://localhost:5432/opendata";
         String user = "postgres";
         String password = "postgres";
         DecimalFormat ft = new DecimalFormat("###,###.##");

@@ -15,7 +15,7 @@ public class RestCommunicator {
         for (JSONObject json : results) {
             final String POST_PARAMS = json.toString();
 
-            URL obj = new URL("https://www.hlidacstatu.cz/api/v1/DatasetItem/" + datasetId + "/" + json.get("Id"));
+            URL obj = new URL("https://www.hlidacstatu.cz/api/v1/DatasetItem/" + datasetId + "/" + json.get("Id") + "?rewrite=true");
             HttpURLConnection postConnection = (HttpURLConnection) obj.openConnection();
 
             postConnection.setRequestMethod("POST");
