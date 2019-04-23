@@ -3,7 +3,7 @@
   "datasetId": "faktury-mscr",
   "origUrl": "https://data.justice.cz/Faktury%20Ministerstva%20spravedlnosti/Faktury%20MSp%20{year}.xls",
   "sourcecodeUrl": null,
-  "description": "Faktury Ministerstva spravedlnosti České republiky od roku 2009",
+  "description": "OpenDataLab.cz - Faktury Ministerstva spravedlnosti České republiky od roku 2009",
   "betaversion": true,
   "jsonSchema": {
 	"definitions": {

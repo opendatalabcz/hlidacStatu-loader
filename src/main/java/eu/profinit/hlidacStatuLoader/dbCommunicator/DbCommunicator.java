@@ -1,7 +1,6 @@
 package eu.profinit.hlidacStatuLoader.dbCommunicator;
 
 import eu.profinit.hlidacStatuLoader.institution.InstitutionCreator;
-import org.jcp.xml.dsig.internal.SignerOutputStream;
 import org.json.JSONObject;
 
 import java.sql.*;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public class DbCommunicator {
     public static List getJsonResult(InstitutionCreator ic) {
-        String url = "jdbc:postgresql://localhost:5432/opendata";
+        String url = "jdbc:postgresql://localhost:5432/store";
         String user = "postgres";
         String password = "postgres";
         DecimalFormat ft = new DecimalFormat("###,###.##");

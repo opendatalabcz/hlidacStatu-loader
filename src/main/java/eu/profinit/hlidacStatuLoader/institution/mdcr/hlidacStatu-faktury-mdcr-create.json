@@ -118,7 +118,7 @@
 					{{end #if}}
                 </td>
                 <td>
-                    {{ if (fn_IsNullOrEmpty item.dateCreated)}}
+                    {{ if (fn_IsNullOrEmpty item.dueCreated)}}
 						neuvedeno
 					{{ else }}
 						{{fn_FormatDate item.dueDate  "dd.MM.yyyy"}}
