@@ -1,13 +1,33 @@
 {
-  "name": "Faktury MZPČR",
-  "datasetId": "faktury-mzpcr",
-  "origUrl": "https://www.mzp.cz/www/smlouvy-web.nsf",
+  "name": "Faktury ministerstev ČR",
+  "datasetId": "ministry-invoices",
+  "origUrl": null,
   "sourcecodeUrl": null,
-  "description": "OpenDataLab.cz - Faktury Ministerstva životního prostředí České republiky od roku 2011",
+  "description": "OpenDataLab.cz - Faktury ministerstev České republiky",
   "betaversion": true,
   "jsonSchema": {
     "definitions": {
       "partner": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ICO": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "ministry": {
         "type": [
           "object",
           "null"
@@ -43,6 +63,18 @@
         ]
       },
       "subject": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "budgetCategory": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "variableSymbol": {
         "type": [
           "string",
           "null"
@@ -90,6 +122,9 @@
       "partner": {
         "$ref": "#/definitions/partner"
       },
+      "ministry": {
+        "$ref": "#/definitions/ministry"
+      },
       "authorityIdentifier": {
         "type": [
           "string",
@@ -102,7 +137,8 @@
     "body": '<table class="table table-hover">
     <thead>
     <tr>
-    <th>Číslo faktury</th>
+    <th>Ministerstvo</th>
+    <th>Faktura</th>
     <th>Datum přijetí</th>
     <th>Datum splatnosti</th>
     <th>Datum úhrady</th>
@@ -115,9 +151,18 @@
 
 {{ for item in model.Result }}
 <tr>
+<td>
+{{ if (fn_IsNullOrEmpty item.ministry.ICO)}}
+{{ fn_NormalizeText item.ministry.name }}
+{{else}}
+<a href="https://www.hlidacstatu.cz/subjekt/{{item.ministry.ICO}}">{{fn_NormalizeText item.ministry.name}}</a><br />
+{{end #if }}
+</td>
+
 <td style="white-space: nowrap;">
 <a href="{{fn_DatasetItemUrl item.Id}}">{{item.authorityIdentifier}}</a>
 </td>
+
 <td>
 {{ if (fn_IsNullOrEmpty item.dateCreated)}}
 neuvedeno
@@ -125,6 +170,7 @@ neuvedeno
 {{fn_FormatDate item.dateCreated  "dd.MM.yyyy"}}
 {{end #if}}
 </td>
+
 <td>
 {{ if (fn_IsNullOrEmpty item.dueDate)}}
 neuvedeno
@@ -132,6 +178,7 @@ neuvedeno
 {{fn_FormatDate item.dueDate  "dd.MM.yyyy"}}
 {{end #if}}
 </td>
+
 <td>
 {{ if (fn_IsNullOrEmpty item.dateOfPayment)}}
 neuhrazeno
@@ -139,21 +186,31 @@ neuhrazeno
 {{fn_FormatDate item.dateOfPayment  "dd.MM.yyyy"}}
 {{end #if}}
 </td>
+
 <td>
 {{ if (fn_IsNullOrEmpty item.partner.ICO)}}
-
 {{ fn_NormalizeText item.partner.name }}
-
 {{else}}
-
 <a href="https://www.hlidacstatu.cz/subjekt/{{item.partner.ICO}}">{{fn_NormalizeText item.partner.name}}</a><br />
 {{end #if }}
+</td>
 
-</td>
 <td>
+{{ if (fn_IsNullOrEmpty item.originalCurrencyAmount)}}
+neuvedeno
+{{ else }}
 {{item.originalCurrencyAmount}}
+{{end #if}}
 </td>
-<td>{{item.currency}}</td>
+
+<td>
+{{ if (fn_IsNullOrEmpty item.currency)}}
+neuvedeno
+{{ else }}
+{{item.currency}}
+{{end #if}}
+</td>
+
 </tr>
 {{end }}
 </tbody>
@@ -164,25 +221,44 @@ neuhrazeno
 "body": '{{this.item = model}}
 <table class="table table-hover">
 <tbody>
+
 <tr>
-<td>Číslo faktury</td>
-<td>{{item.authorityIdentifier}}</td>
+<td>Ministerstvo</td>
+
+<td>
+{{ if (fn_IsNullOrEmpty item.ministry.ICO)}}
+{{ fn_NormalizeText item.ministry.name }}
+{{else}}
+<a href="https://www.hlidacstatu.cz/subjekt/{{item.ministry.ICO}}">{{fn_NormalizeText item.ministry.name}}</a><br />
+{{end #if }}
+</td>
 </tr>
+
+<tr>
+<td>Faktura</td>
+
+<td>
+{{item.authorityIdentifier}}
+</td>
+</tr>
+
 <tr>
 <td>Typ záznamu</td>
-<td>{{ if (item.recordType == "invoice")}}
 
+<td>
+{{ if (item.recordType == "invoice")}}
 faktura
-
 {{else if (item.recordType == "payment")}}
-
 platba
 {{else}}
 {{item.recordType}}
-{{end #if }}</td>
+{{end #if }}
+</td>
 </tr>
+
 <tr>
 <td>Účel platby</td>
+
 <td>
 {{ if (fn_IsNullOrEmpty item.subject)}}
 neuvedeno
@@ -191,8 +267,34 @@ neuvedeno
 {{end #if}}
 </td>
 </tr>
+
+<tr>
+<td>Název položky rozpočtu</td>
+
+<td>
+{{ if (fn_IsNullOrEmpty item.budgetCategory)}}
+neuvedeno
+{{else}}
+{{ fn_NormalizeText item.budgetCategory}}
+{{end #if}}
+</td>
+</tr>
+
+<tr>
+<td>Variabilní symbol</td>
+
+<td>
+{{ if (fn_IsNullOrEmpty item.variableSymbol)}}
+neuvedeno
+{{else}}
+{{ fn_NormalizeText item.variableSymbol}}
+{{end #if}}
+</td>
+</tr>
+
 <tr>
 <td>Datum přijetí</td>
+
 <td>
 {{ if (fn_IsNullOrEmpty item.dateCreated)}}
 neuvedeno
@@ -201,18 +303,22 @@ neuvedeno
 {{end #if}}
 </td>
 </tr>
+
 <tr>
 <td>Datum splatnosti</td>
+
 <td>
-{{ if (fn_IsNullOrEmpty item.dateCreated)}}
+{{ if (fn_IsNullOrEmpty item.dueDate)}}
 neuvedeno
 {{ else }}
 {{fn_FormatDate item.dueDate  "dd.MM.yyyy"}}
 {{end #if}}
 </td>
 </tr>
+
 <tr>
 <td>Datum úhrady</td>
+
 <td>
 {{ if (fn_IsNullOrEmpty item.dateOfPayment)}}
 neuhrazeno
@@ -221,38 +327,55 @@ neuhrazeno
 {{end #if}}
 </td>
 </tr>
+
 <tr>
 <td>Měna</td>
+
 <td>
+{{ if (fn_IsNullOrEmpty item.currency)}}
+neuvedeno
+{{ else }}
 {{item.currency}}
+{{end #if}}
 </td>
 </tr>
+
 <tr>
 <td>Celková částka v původní měně</td>
+
 <td>
+{{ if (fn_IsNullOrEmpty item.originalCurrencyAmount)}}
+neuvedeno
+{{ else }}
 {{item.originalCurrencyAmount}}
+{{end #if}}
 </td>
 </tr>
+
 <tr>
 <td>Celková částka v CZK</td>
+
 <td>
+{{ if (fn_IsNullOrEmpty item.amountCzk)}}
+neuvedeno
+{{ else }}
 {{item.amountCzk}}
+{{end #if}}
 </td>
 </tr>
+
 <tr>
 <td>Účastník</td>
+
 <td>
 {{ if (fn_IsNullOrEmpty item.partner.ICO)}}
-
 {{ fn_NormalizeText item.partner.name }}
-
 {{else}}
-
 <a href="https://www.hlidacstatu.cz/subjekt/{{item.partner.ICO}}">{{fn_NormalizeText item.partner.name}}</a><br />
 {{end #if }}
-
 </td>
 </tr>
+
 </tbody>
 </table>',
 "properties": null

@@ -25,12 +25,12 @@ public class Main
 //        InstitutionCreator ic = new MFCRCreator();
 //        InstitutionCreator ic = new MSCRCreator();
 //        InstitutionCreator ic = new MMRCRCreator();
-//        InstitutionCreator ic = new MDCRCreator();
+        InstitutionCreator ic = new MDCRCreator();
 //        InstitutionCreator ic = new SFDICreator();
 //        InstitutionCreator ic = new MVCRCreator();
 //        InstitutionCreator ic = new MPOCRCreator();
 //        InstitutionCreator ic = new MZPCRCreator();
-        InstitutionCreator ic = new MOCRCreator();
+//        InstitutionCreator ic = new MOCRCreator();
         try {
             RestCommunicator.POSTRequest(DbCommunicator.getJsonResult(ic), ic.getDatasetId());
         } catch (IOException e) {
