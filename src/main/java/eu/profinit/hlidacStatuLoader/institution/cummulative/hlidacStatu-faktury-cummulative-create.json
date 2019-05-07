@@ -1,153 +1,153 @@
 {
   "name": "Faktury ministerstev ČR",
   "datasetId": "ministry-invoices",
-  "origUrl": null,
+  "origUrl": "",
   "sourcecodeUrl": null,
   "description": "OpenDataLab.cz - Faktury ministerstev České republiky",
   "betaversion": true,
-  "jsonSchema": {
-    "definitions": {
-      "partner": {
-        "type": [
-          "object",
-          "null"
-        ],
-        "properties": {
-          "name": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "ICO": {
-            "type": [
-              "string",
-              "null"
-            ]
-          }
-        }
-      },
-      "ministry": {
-        "type": [
-          "object",
-          "null"
-        ],
-        "properties": {
-          "name": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "ICO": {
-            "type": [
-              "string",
-              "null"
-            ]
-          }
-        }
-      }
-    },
-    "type": "object",
-    "properties": {
-      "Id": {
-        "type": [
-          "string",
-          "null"
-        ]
-      },
-      "recordType": {
-        "type": [
-          "string",
-          "null"
-        ]
-      },
-      "subject": {
-        "type": [
-          "string",
-          "null"
-        ]
-      },
-      "budgetCategory": {
-        "type": [
-          "string",
-          "null"
-        ]
-      },
-      "variableSymbol": {
-        "type": [
-          "string",
-          "null"
-        ]
-      },
-      "dateCreated": {
-        "type": [
-          "string",
-          "null"
-        ],
-        "format": "date"
-      },
-      "dueDate": {
-        "type": [
-          "string",
-          "null"
-        ],
-        "format": "date"
-      },
-      "dateOfPayment": {
-        "type": [
-          "string",
-          "null"
-        ],
-        "format": "date"
-      },
-      "currency": {
-        "type": [
-          "string",
-          "null"
-        ]
-      },
-      "originalCurrencyAmount": {
-        "type": [
-          "string",
-          "null"
-        ]
-      },
-      "amountCzk": {
-        "type": [
-          "string",
-          "null"
-        ]
-      },
-      "partner": {
-        "$ref": "#/definitions/partner"
-      },
-      "ministry": {
-        "$ref": "#/definitions/ministry"
-      },
-      "authorityIdentifier": {
-        "type": [
-          "string",
-          "null"
-        ]
-      }
-    }
-  },
-  "searchResultTemplate": {
-    "body": '<table class="table table-hover">
-    <thead>
-    <tr>
-    <th>Ministerstvo</th>
-    <th>Faktura</th>
-    <th>Datum přijetí</th>
-    <th>Datum splatnosti</th>
-    <th>Datum úhrady</th>
-    <th>Účastník</th>
-    <th>Částka</th>
-    <th>Měna</th>
-    </tr>
-    </thead>
-    <tbody>
+  "jsonSchema": "{
+  \"definitions\": {
+  \"partner\": {
+  \"type\": [
+  \"object\",
+  \"null\"
+],
+  \"properties\": {
+  \"name\": {
+  \"type\": [
+  \"string\",
+  \"null\"
+]
+},
+\"ICO\": {
+\"type\": [
+\"string\",
+\"null\"
+]
+}
+}
+},
+\"ministry\": {
+\"type\": [
+\"object\",
+\"null\"
+],
+\"properties\": {
+\"name\": {
+\"type\": [
+\"string\",
+\"null\"
+]
+},
+\"ICO\": {
+\"type\": [
+\"string\",
+\"null\"
+]
+}
+}
+}
+},
+\"type\": \"object\",
+\"properties\": {
+\"Id\": {
+\"type\": [
+\"string\",
+\"null\"
+]
+},
+\"recordType\": {
+\"type\": [
+\"string\",
+\"null\"
+]
+},
+\"subject\": {
+\"type\": [
+\"string\",
+\"null\"
+]
+},
+\"budgetCategory\": {
+\"type\": [
+\"string\",
+\"null\"
+]
+},
+\"variableSymbol\": {
+\"type\": [
+\"string\",
+\"null\"
+]
+},
+\"dateCreated\": {
+\"type\": [
+\"string\",
+\"null\"
+],
+\"format\": \"date\"
+},
+\"dueDate\": {
+\"type\": [
+\"string\",
+\"null\"
+],
+\"format\": \"date\"
+},
+\"dateOfPayment\": {
+\"type\": [
+\"string\",
+\"null\"
+],
+\"format\": \"date\"
+},
+\"currency\": {
+\"type\": [
+\"string\",
+\"null\"
+]
+},
+\"originalCurrencyAmount\": {
+\"type\": [
+\"string\",
+\"null\"
+]
+},
+\"amountCzk\": {
+\"type\": [
+\"string\",
+\"null\"
+]
+},
+\"partner\": {
+\"$ref\": \"#/definitions/partner\"
+},
+\"ministry\": {
+\"$ref\": \"#/definitions/ministry\"
+},
+\"authorityIdentifier\": {
+\"type\": [
+\"string\",
+\"null\"
+]
+}
+}
+}",
+"searchResultTemplate": {
+"body": "<table class=\"table table-hover\">
+<thead>
+<tr>
+<th>Ministerstvo</th>
+<th>Faktura</th>
+<th>Datum přijetí</th>
+<th>Datum splatnosti</th>
+<th>Datum úhrady</th>
+<th>Účastník</th>
+<th>Částka</th>
+<th>Měna</th>
+</tr>
+</thead>
+<tbody>
 
 {{ for item in model.Result }}
 <tr>
@@ -155,19 +155,19 @@
 {{ if (fn_IsNullOrEmpty item.ministry.ICO)}}
 {{ fn_NormalizeText item.ministry.name }}
 {{else}}
-<a href="https://www.hlidacstatu.cz/subjekt/{{item.ministry.ICO}}">{{fn_NormalizeText item.ministry.name}}</a><br />
+<a href=\"https://www.hlidacstatu.cz/subjekt/{{item.ministry.ICO}}\">{{fn_NormalizeText item.ministry.name}}</a><br />
 {{end #if }}
 </td>
 
-<td style="white-space: nowrap;">
-<a href="{{fn_DatasetItemUrl item.Id}}">{{item.authorityIdentifier}}</a>
+<td style=\"white-space: nowrap;\">
+<a href=\"{{fn_DatasetItemUrl item.Id}}\">{{item.authorityIdentifier}}</a>
 </td>
 
 <td>
 {{ if (fn_IsNullOrEmpty item.dateCreated)}}
 neuvedeno
 {{ else }}
-{{fn_FormatDate item.dateCreated  "dd.MM.yyyy"}}
+{{fn_FormatDate item.dateCreated  \"dd.MM.yyyy\"}}
 {{end #if}}
 </td>
 
@@ -175,7 +175,7 @@ neuvedeno
 {{ if (fn_IsNullOrEmpty item.dueDate)}}
 neuvedeno
 {{ else }}
-{{fn_FormatDate item.dueDate  "dd.MM.yyyy"}}
+{{fn_FormatDate item.dueDate  \"dd.MM.yyyy\"}}
 {{end #if}}
 </td>
 
@@ -183,7 +183,7 @@ neuvedeno
 {{ if (fn_IsNullOrEmpty item.dateOfPayment)}}
 neuhrazeno
 {{ else }}
-{{fn_FormatDate item.dateOfPayment  "dd.MM.yyyy"}}
+{{fn_FormatDate item.dateOfPayment  \"dd.MM.yyyy\"}}
 {{end #if}}
 </td>
 
@@ -191,7 +191,7 @@ neuhrazeno
 {{ if (fn_IsNullOrEmpty item.partner.ICO)}}
 {{ fn_NormalizeText item.partner.name }}
 {{else}}
-<a href="https://www.hlidacstatu.cz/subjekt/{{item.partner.ICO}}">{{fn_NormalizeText item.partner.name}}</a><br />
+<a href=\"https://www.hlidacstatu.cz/subjekt/{{item.partner.ICO}}\">{{fn_NormalizeText item.partner.name}}</a><br />
 {{end #if }}
 </td>
 
@@ -214,7 +214,7 @@ neuvedeno
 </tr>
 {{end }}
 </tbody>
-</table>',
+</table>",
 "properties": null
 },
 "detailTemplate": {
