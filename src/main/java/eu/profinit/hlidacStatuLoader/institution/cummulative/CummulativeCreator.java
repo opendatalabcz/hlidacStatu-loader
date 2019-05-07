@@ -14,6 +14,9 @@ public class CummulativeCreator implements InstitutionCreator {
         JSONObject partner = new JSONObject();
         JSONObject ministry = new JSONObject();
 
+        String original_currency_amount = rs.getString("original_currency_amount");
+        String amount_czk = rs.getString("amount_czk");
+
         partner.put("name", rs.getString("partner_name"));
         partner.put("ICO", rs.getString("partner_ico"));
 
@@ -29,10 +32,19 @@ public class CummulativeCreator implements InstitutionCreator {
         json.put("dueDate", rs.getString("due_date"));
         json.put("dateOfPayment", rs.getString("date_of_payment"));
         json.put("currency", rs.getString("currency"));
-        json.put("originalCurrencyAmount", ft.format(Double.parseDouble(rs.getString("original_currency_amount"))));
-//                json.put("originalCurrencyAmount", rs.getString("original_currency_amount"));
-        json.put("amountCzk", ft.format(Double.parseDouble(rs.getString("amount_czk"))));
-//                json.put("amountCzk", rs.getString("amount_czk"));
+
+        if (original_currency_amount != null) {
+            json.put("originalCurrencyAmount", ft.format(Double.parseDouble(original_currency_amount)));
+        } else {
+            json.put("originalCurrencyAmount", original_currency_amount);
+        }
+
+        if (amount_czk != null) {
+            json.put("amountCzk", ft.format(Double.parseDouble(amount_czk)));
+        } else {
+            json.put("amountCzk", amount_czk);
+        }
+
         json.put("partner", partner);
         json.put("ministry", ministry);
         json.put("authorityIdentifier", rs.getString("authority_identifier"));
@@ -61,7 +73,8 @@ public class CummulativeCreator implements InstitutionCreator {
                 "from record " +
                 "left join entity as par on partner = par.entity_id " +
                 "join entity as min on authority = min.entity_id " +
-                "where record_type in ('invoice', 'payment')";
+                "where record_type in ('invoice', 'payment', 'transferorder', 'deposit', 'creditnote')" +
+                "order by record_id";
     }
 
     @Override

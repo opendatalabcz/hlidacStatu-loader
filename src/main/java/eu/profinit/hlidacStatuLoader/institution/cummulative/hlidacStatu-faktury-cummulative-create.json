@@ -1,22 +1,22 @@
 {
-  "name": "Faktury ministerstev ČR",
-  "datasetId": "ministry-invoices",
-  "origUrl": "",
-  "sourcecodeUrl": null,
-  "description": "OpenDataLab.cz - Faktury ministerstev České republiky",
-  "betaversion": true,
-  "jsonSchema": "{
-  \"definitions\": {
-  \"partner\": {
-  \"type\": [
-  \"object\",
-  \"null\"
+"name": "Faktury ministerstev ČR",
+"datasetId": "ministry-invoices",
+"origUrl": "",
+"sourcecodeUrl": null,
+"description": "OpenDataLab.cz - Faktury ministerstev České republiky",
+"betaversion": true,
+"jsonSchema": "{
+\"definitions\": {
+\"partner\": {
+\"type\": [
+\"object\",
+\"null\"
 ],
-  \"properties\": {
-  \"name\": {
-  \"type\": [
-  \"string\",
-  \"null\"
+\"properties\": {
+\"name\": {
+\"type\": [
+\"string\",
+\"null\"
 ]
 },
 \"ICO\": {
@@ -250,6 +250,12 @@ neuvedeno
 faktura
 {{else if (item.recordType == "payment")}}
 platba
+{{else if (item.recordType == "transferorder")}}
+platební poukaz
+{{else if (item.recordType == "deposit")}}
+zálohová faktura
+{{else if (item.recordType == "creditnote")}}
+dobropis
 {{else}}
 {{item.recordType}}
 {{end #if }}
@@ -321,7 +327,7 @@ neuvedeno
 
 <td>
 {{ if (fn_IsNullOrEmpty item.dateOfPayment)}}
-neuhrazeno
+neuvedeno
 {{ else }}
 {{fn_FormatDate item.dateOfPayment  "dd.MM.yyyy"}}
 {{end #if}}
@@ -379,5 +385,8 @@ neuvedeno
 </tbody>
 </table>',
 "properties": null
-}
+},
+"orderList": [["Ministerstvo", "ministry.name"], ["Datum přijetí", "dateCreated"],
+    ["Datum splatnosti", "dueDate"], ["Datum úhrady", "dateOfPayment"],
+    ["Účastník", "partner.name"], ["Částka", "originalCurrencyAmount"]]
 }
