@@ -14,8 +14,8 @@ public class CummulativeCreator implements InstitutionCreator {
         JSONObject partner = new JSONObject();
         JSONObject ministry = new JSONObject();
 
-        String original_currency_amount = rs.getString("original_currency_amount");
-        String amount_czk = rs.getString("amount_czk");
+        Double original_currency_amount = rs.getDouble("original_currency_amount");
+        Double amount_czk = rs.getDouble("amount_czk");
 
         partner.put("name", rs.getString("partner_name"));
         partner.put("ICO", rs.getString("partner_ico"));
@@ -33,17 +33,17 @@ public class CummulativeCreator implements InstitutionCreator {
         json.put("dateOfPayment", rs.getString("date_of_payment"));
         json.put("currency", rs.getString("currency"));
 
-        if (original_currency_amount != null) {
-            json.put("originalCurrencyAmount", ft.format(Double.parseDouble(original_currency_amount)));
-        } else {
+//        if (original_currency_amount != null) {
+//            json.put("originalCurrencyAmount", ft.format(Double.parseDouble(original_currency_amount)));
+//        } else {
             json.put("originalCurrencyAmount", original_currency_amount);
-        }
+//        }
 
-        if (amount_czk != null) {
-            json.put("amountCzk", ft.format(Double.parseDouble(amount_czk)));
-        } else {
+//        if (amount_czk != null) {
+//            json.put("amountCzk", ft.format(Double.parseDouble(amount_czk)));
+//        } else {
             json.put("amountCzk", amount_czk);
-        }
+//        }
 
         json.put("partner", partner);
         json.put("ministry", ministry);
@@ -73,8 +73,9 @@ public class CummulativeCreator implements InstitutionCreator {
                 "from record " +
                 "left join entity as par on partner = par.entity_id " +
                 "join entity as min on authority = min.entity_id " +
-                "where record_type in ('invoice', 'payment', 'transferorder', 'deposit', 'creditnote')" +
-                "order by record_id";
+                "where record_type in ('invoice', 'payment', 'transferorder', 'deposit', 'creditnote') " +
+                "and authority = 6 " +
+                "order by record_id ";
     }
 
     @Override
@@ -82,3 +83,26 @@ public class CummulativeCreator implements InstitutionCreator {
         return "ministry-invoices";
     }
 }
+
+//select master_id,
+//record_type,
+//subject,
+//budget_category,
+//variable_symbol,
+//date_created,
+//due_date,
+//date_of_payment,
+//currency,
+//original_currency_amount,
+//amount_czk,
+//par.name as partner_name,
+//par.ico as partner_ico,
+//min.name as ministry_name,
+//min.ico as ministry_ico,
+//authority_identifier
+//from record
+//left join entity as par on partner = par.entity_id
+//join entity as min on authority = min.entity_id
+//where record_type in ('invoice', 'payment', 'transferorder', 'deposit', 'creditnote')
+//and authority = 4
+//order by record_id;

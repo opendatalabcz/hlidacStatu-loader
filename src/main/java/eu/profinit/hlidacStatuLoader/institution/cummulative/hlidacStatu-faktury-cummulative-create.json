@@ -3,8 +3,8 @@
 "datasetId": "ministry-invoices",
 "origUrl": "",
 "sourcecodeUrl": null,
-"description": "OpenDataLab.cz - Faktury ministerstev České republiky",
-"betaversion": true,
+"description": "OpenDataLab.cz - Faktury ministerstev České republiky. Autor neručí za aktuálnost, správnost, úplnost a kvalitu předávaných informací.",
+"betaversion": false,
 "jsonSchema": "{
 \"definitions\": {
 \"partner\": {
@@ -109,13 +109,13 @@
 },
 \"originalCurrencyAmount\": {
 \"type\": [
-\"string\",
+\"number\",
 \"null\"
 ]
 },
 \"amountCzk\": {
 \"type\": [
-\"string\",
+\"number\",
 \"null\"
 ]
 },
@@ -137,30 +137,30 @@
 "body": "<table class=\"table table-hover\">
 <thead>
 <tr>
-<th>Ministerstvo</th>
 <th>Faktura</th>
+<th>Ministerstvo</th>
 <th>Datum přijetí</th>
 <th>Datum splatnosti</th>
 <th>Datum úhrady</th>
 <th>Účastník</th>
-<th>Částka</th>
-<th>Měna</th>
+<th>Částka v Kč</th>
 </tr>
 </thead>
 <tbody>
 
 {{ for item in model.Result }}
 <tr>
+
+<td style=\"white-space: nowrap;\">
+<a href=\"{{fn_DatasetItemUrl item.Id}}\">{{item.authorityIdentifier}}</a>
+</td>
+
 <td>
 {{ if (fn_IsNullOrEmpty item.ministry.ICO)}}
 {{ fn_NormalizeText item.ministry.name }}
 {{else}}
 <a href=\"https://www.hlidacstatu.cz/subjekt/{{item.ministry.ICO}}\">{{fn_NormalizeText item.ministry.name}}</a><br />
 {{end #if }}
-</td>
-
-<td style=\"white-space: nowrap;\">
-<a href=\"{{fn_DatasetItemUrl item.Id}}\">{{item.authorityIdentifier}}</a>
 </td>
 
 <td>
@@ -181,34 +181,28 @@ neuvedeno
 
 <td>
 {{ if (fn_IsNullOrEmpty item.dateOfPayment)}}
-neuhrazeno
+neuvedeno
 {{ else }}
 {{fn_FormatDate item.dateOfPayment  \"dd.MM.yyyy\"}}
 {{end #if}}
 </td>
 
 <td>
-{{ if (fn_IsNullOrEmpty item.partner.ICO)}}
+{{ if ((fn_IsNullOrEmpty item.partner.ICO) && (fn_IsNullOrEmpty item.partner.name))}}
+neuvedeno
+{{else if (fn_IsNullOrEmpty item.partner.ICO)}}
 {{ fn_NormalizeText item.partner.name }}
 {{else}}
 <a href=\"https://www.hlidacstatu.cz/subjekt/{{item.partner.ICO}}\">{{fn_NormalizeText item.partner.name}}</a><br />
 {{end #if }}
 </td>
 
-<td>
-{{ if (fn_IsNullOrEmpty item.originalCurrencyAmount)}}
+<td class=\"number\">
+{{ if (fn_IsNullOrEmpty item.amountCzk)}}
 neuvedeno
-{{ else }}
-{{item.originalCurrencyAmount}}
-{{end #if}}
-</td>
-
-<td>
-{{ if (fn_IsNullOrEmpty item.currency)}}
-neuvedeno
-{{ else }}
-{{item.currency}}
-{{end #if}}
+{{else}}
+{{ fn_FormatPrice item.amountCzk }}
+{{end #if }}
 </td>
 
 </tr>
@@ -353,7 +347,7 @@ neuvedeno
 {{ if (fn_IsNullOrEmpty item.originalCurrencyAmount)}}
 neuvedeno
 {{ else }}
-{{item.originalCurrencyAmount}}
+{{ item.originalCurrencyAmount}}
 {{end #if}}
 </td>
 </tr>
@@ -365,7 +359,7 @@ neuvedeno
 {{ if (fn_IsNullOrEmpty item.amountCzk)}}
 neuvedeno
 {{ else }}
-{{item.amountCzk}}
+{{ fn_FormatPrice item.amountCzk}}
 {{end #if}}
 </td>
 </tr>
@@ -374,10 +368,24 @@ neuvedeno
 <td>Účastník</td>
 
 <td>
-{{ if (fn_IsNullOrEmpty item.partner.ICO)}}
+{{ if ((fn_IsNullOrEmpty item.partner.ICO) && (fn_IsNullOrEmpty item.partner.name))}}
+neuvedeno
+{{else if (fn_IsNullOrEmpty item.partner.ICO)}}
 {{ fn_NormalizeText item.partner.name }}
 {{else}}
-<a href="https://www.hlidacstatu.cz/subjekt/{{item.partner.ICO}}">{{fn_NormalizeText item.partner.name}}</a><br />
+<a href=\"https://www.hlidacstatu.cz/subjekt/{{item.partner.ICO}}\">{{fn_NormalizeText item.partner.name}}</a><br />
+{{end #if }}
+</td>
+</tr>
+
+<tr>
+<td>IČO účastníka</td>
+
+<td>
+{{ if (fn_IsNullOrEmpty item.partner.ICO)}}
+neuvedeno
+{{else}}
+{{ item.partner.ICO }}
 {{end #if }}
 </td>
 </tr>
